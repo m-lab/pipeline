@@ -3,9 +3,11 @@ package main
 import (
 	"bytes"
 	"errors"
+	"flag"
 	"fmt"
 	"github.com/gorilla/mux"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -23,6 +25,8 @@ var funcs = map[string]interface{} {
 	"fathom": validators.Fathom,
 	"ndt": validators.Ndt,
 }
+
+var port = flag.Int("port", 4242, "the port to listen on")
 
 func (c *Chunk) validate() error {
 	fun := funcs[c.Tool]
@@ -57,12 +61,13 @@ func (c *Chunk) save() error {
 }
 
 func main() {
+	flag.Parse()
 	r := mux.NewRouter()
 	r.HandleFunc("/", root).Methods("GET")
 	r.HandleFunc("/{tool}", tool).Methods("GET")
 	r.HandleFunc("/{tool}/{version}", tool_and_version)
 	http.Handle("/", r)
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe(":" + strconv.Itoa(*port), nil))
 }
 
 func root(w http.ResponseWriter, r *http.Request) {
