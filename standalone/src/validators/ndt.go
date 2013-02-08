@@ -1,8 +1,9 @@
 package validators
 
 import (
+  "errors"
 )
 
 func Ndt(version string, data []byte) error {
-	return nil
+	return errors.New("Unimplemented")
 }
