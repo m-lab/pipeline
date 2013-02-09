@@ -1,6 +1,7 @@
 package validators
 
 import (
+  "strconv"
   "testing"
 )
 
@@ -23,6 +24,19 @@ func TestFathom_Invalid(t *testing.T) {
   err = Fathom("", []byte("[1, 2]"))
   if err == nil {
     t.Error("JSON array should be invalid")
+  }
+
+  // Approximately 120k - 100k is the limit.
+  var long_json = "{"
+  for i := 0; i < 10 * 1024; i++ {
+    var stri = strconv.Itoa(i)
+    long_json += "\"" + stri + "\": " + stri + ","
+  }
+  long_json += "}"
+  err = Fathom("", []byte(long_json))
+  if err == nil {
+    t.Error("JSON of length " + strconv.Itoa(len(long_json)) +
+            "should be invalid")
   }
 }
 
