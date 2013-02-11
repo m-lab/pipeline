@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./pipeline -port=4242 &
+~/pipeline -port=4242 &
