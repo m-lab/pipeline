@@ -55,6 +55,8 @@ func (c *Chunk) save() error {
 		return err
 	}
 
+  // TODO(dominic): Save to
+  // /var/spool/<tool>/YYYY/MM/DD/<iso8601>_<tool>_<version>
 	filename := c.Tool + "-" + c.Version + "." +
 		strconv.FormatInt(time.Now().Unix(), 10)
 	return ioutil.WriteFile(filename, c.Data, 0600)
