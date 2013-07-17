@@ -55,10 +55,14 @@ func (c *Chunk) save() error {
 		return err
 	}
 
-  // TODO(dominic): Save to
-  // /var/spool/<tool>/YYYY/MM/DD/<iso8601>_<tool>_<version>
-	filename := c.Tool + "-" + c.Version + "." +
-		strconv.FormatInt(time.Now().Unix(), 10)
+	now := time.Now()
+
+	// /var/spool/<tool>/YYYY/MM/DD/<iso8601>_<tool>_<version>
+	filename := "/var/spool/" + c.Tool + "/" +
+		strconv.FormatInt(now.Year(), 10) + "/" +
+		fmt.Sprintf("%02d", now.Month()) + "/" +
+		fmt.Sprintf("%02d", now.Day()) + "/" +
+		strconv.FormatInt(now.Unix(), 10) + "_" + c.Tool + "_" + c.Version
 	return ioutil.WriteFile(filename, c.Data, 0600)
 }
 
@@ -80,7 +84,7 @@ func root(w http.ResponseWriter, r *http.Request) {
 
 func tool(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	tool := vars["tool"]
+	tool := strings.ToLower(vars["tool"])
 
 	// TODO(dominic): return metrics for tool
 	fmt.Fprintf(w, "Metrics for tool '%s' will be here", tool)
@@ -88,8 +92,8 @@ func tool(w http.ResponseWriter, r *http.Request) {
 
 func tool_and_version(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	tool := vars["tool"]
-	version := vars["version"]
+	tool := strings.ToLower(vars["tool"])
+	version := strings.ToLower(vars["version"])
 
 	if r.Method == "GET" {
 		// TODO(dominic): return metrics for tool and version
