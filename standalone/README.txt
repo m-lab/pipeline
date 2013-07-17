@@ -1,6 +1,6 @@
 BUILD
 =====
-$ export GOPATH=<path to .>
+$ export GOPATH=`pwd`
 $ go get github.com/gorilla/mux
 $ go build pipeline
 
