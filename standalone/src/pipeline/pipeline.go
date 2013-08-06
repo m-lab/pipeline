@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"reflect"
 	"strconv"
+        "strings"
 	"time"
 	"validators"
 )
@@ -26,6 +27,7 @@ var funcs = map[string]interface{} {
 	"ndt": validators.Ndt,
 }
 
+var output_dir = flag.String("output_dir", "", "the directory to write to")
 var port = flag.Int("port", 4242, "the port to listen on")
 
 func (c *Chunk) validate() error {
@@ -57,9 +59,9 @@ func (c *Chunk) save() error {
 
 	now := time.Now()
 
-	// /var/spool/<tool>/YYYY/MM/DD/<iso8601>_<tool>_<version>
-	filename := "/var/spool/" + c.Tool + "/" +
-		strconv.FormatInt(now.Year(), 10) + "/" +
+	// <output_dir>/<tool>/YYYY/MM/DD/<iso8601>_<tool>_<version>
+	filename := *output_dir + c.Tool + "/" +
+		strconv.Itoa(now.Year()) + "/" +
 		fmt.Sprintf("%02d", now.Month()) + "/" +
 		fmt.Sprintf("%02d", now.Day()) + "/" +
 		strconv.FormatInt(now.Unix(), 10) + "_" + c.Tool + "_" + c.Version
