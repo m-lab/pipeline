@@ -1,4 +1,4 @@
 pipeline
 ========
 
-Standalone and GAE based pipeline endpoint
+Standalone and GAE pipeline endpoints for m-lab
